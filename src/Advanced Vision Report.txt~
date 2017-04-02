@@ -1,0 +1,12 @@
+Advanced Vision Report
+1. Noise Removal - Instead of using "bwmorph" function with "open", we use "erode" and "dilate" separately, as we are using different "brush size" for each operation. This behaviour allows us to utilise better segmentation of the video frames.
+2. Labelling Data - We have investigated the case of using 8-connectedness look-up pixels when checking the directions, however, when going through a 640x480 pixels, the algorithm took a noticable amount of time.
+3. Noise Removal - We detected a shadow at on the left of the moving person, around (125, 240) in the image coordinate frame. Our initial goal was to remove it via the algorithm for cleaning noise from binary images (remove 5 pixels-"close"-remove 20 pixels). However, as everything on the left is a wall, there will not be any people dancing on it, thus we cut the image until x = 125 pixels, that also removed the shaddow.
+4. Person Removal - The intial idea was to remove everything on the left hand side of the person at x coordinate 260. However, there might be people dancing at the bottom of the camera, which will be removed. Therefore, we created a function that takes the person location as a parameter and cuts a 170px around that position (as the person is approximately moving in that area). Thus, we are not considering that person for the dance.
+5. Cropping blobs black - Initially we considered comparing each blob on a black background of the big 480 by 640 image in multiple frames. This, however, would be computationally inefficient when computing the bhattacharyya distance, thus we had to crop around each of the blobs.
+6. Cropping blobs ways - We thought of two ways of cropping the image - find the center of each person(blob), draw a cirle with an specific area. The radius of the circle is calculated by the distance from the centre of the mass of the blob to the further away pixel. The second way was to find the topmost, leftmost, bottommost, rightmost pixels of each labelled blob and crop around that.
+7. Why normalized - Normalized histograms are used, as we are not sure how many pixels each blobs will have. Therefore, the computed histograms and their bhattacharyya distance wouldn't be the same in the different frames.
+8. For c
+9. Good bin edges [0, 20, 30, 40, 166, 256]. 
+10. Same person from 110 and 126 frame give Bachatta distance of 0.0647 with the aforementioned bin edges.
+11. Different people from 110 and 126 frame give bachatta distance of 0.3347, 0.1862, 0.1637
